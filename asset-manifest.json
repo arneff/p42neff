@@ -1,0 +1,28 @@
+{
+  "files": {
+    "main.css": "/p42neff/static/css/main.1aa3f63c.chunk.css",
+    "main.js": "/p42neff/static/js/main.d2439fbd.chunk.js",
+    "main.js.map": "/p42neff/static/js/main.d2439fbd.chunk.js.map",
+    "runtime-main.js": "/p42neff/static/js/runtime-main.7e2e65e3.js",
+    "runtime-main.js.map": "/p42neff/static/js/runtime-main.7e2e65e3.js.map",
+    "static/css/2.11b452ed.chunk.css": "/p42neff/static/css/2.11b452ed.chunk.css",
+    "static/js/2.1a856f2d.chunk.js": "/p42neff/static/js/2.1a856f2d.chunk.js",
+    "static/js/2.1a856f2d.chunk.js.map": "/p42neff/static/js/2.1a856f2d.chunk.js.map",
+    "index.html": "/p42neff/index.html",
+    "precache-manifest.5c0e8b9d21e1c599250fb4c2bc61fb75.js": "/p42neff/precache-manifest.5c0e8b9d21e1c599250fb4c2bc61fb75.js",
+    "service-worker.js": "/p42neff/service-worker.js",
+    "static/css/2.11b452ed.chunk.css.map": "/p42neff/static/css/2.11b452ed.chunk.css.map",
+    "static/css/main.1aa3f63c.chunk.css.map": "/p42neff/static/css/main.1aa3f63c.chunk.css.map",
+    "static/js/2.1a856f2d.chunk.js.LICENSE.txt": "/p42neff/static/js/2.1a856f2d.chunk.js.LICENSE.txt",
+    "static/media/loading.svg": "/p42neff/static/media/loading.c5590569.svg",
+    "static/media/pizza.png": "/p42neff/static/media/pizza.dabc0584.png",
+    "static/media/whole.png": "/p42neff/static/media/whole.3ec930d2.png"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.7e2e65e3.js",
+    "static/css/2.11b452ed.chunk.css",
+    "static/js/2.1a856f2d.chunk.js",
+    "static/css/main.1aa3f63c.chunk.css",
+    "static/js/main.d2439fbd.chunk.js"
+  ]
+}
