@@ -12,8 +12,8 @@ require('dotenv').config()
 const app = express();
 
 const port = process.env.API_PORT || 3001;
-const appPort = process.env.SERVER_PORT || 3000;
-const appOrigin = authConfig.appOrigin || `http://localhost:${appPort}`;
+// const appPort = process.env.SERVER_PORT || 3000;
+// const appOrigin = authConfig.appOrigin || `http://localhost:${appPort}`;
 
 if (!authConfig.domain || !authConfig.audience) {
   throw new Error(
@@ -23,7 +23,7 @@ if (!authConfig.domain || !authConfig.audience) {
 
 app.use(morgan("dev"));
 app.use(helmet());
-app.use(cors({ origin: appOrigin }));
+app.use(cors());
 
 
 app.use(express.json());
@@ -85,8 +85,10 @@ app.post("/api/external", checkJwt, checkScopes,  async (req, res) => {
   });
   
   const userResp = await userReq.json()
-  console.log("resp: "+ JSON.stringify(userResp)) 
-  console.log(userResp.user_metadata.orders)
+  // let orders = userResp.user_metadata.orders
+  // console.log("resp: "+ JSON.stringify(userResp)) 
+  // console.log("line 89: " +JSON.stringify(userResp.user_metadata.orders))
+  // console.log(orders)
   if (userResp.user_metadata.orders){
     userResp.user_metadata.orders.push(req.body)
     const metaAdd = await fetch(`https:dev-h1uc4uvp.us.auth0.com/api/v2/users/${user_id}`, {
