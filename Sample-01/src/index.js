@@ -19,6 +19,7 @@ const config = getConfig();
 
 const providerConfig = {
   domain: config.domain,
+  scope: config.scope,
   clientId: config.clientId,
   ...(config.audience ? { audience: config.audience } : null),
   redirectUri: window.location.origin,
