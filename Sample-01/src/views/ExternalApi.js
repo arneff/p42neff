@@ -6,9 +6,8 @@ import config from "../auth_config.json";
 import Loading from "../components/Loading";
 import whole from "../assets/whole.png";
 
-// const { apiOrigin = "http://localhost:3001" } = config;
-const port = process.env.API_PORT || 3001;
-const apiOrigin = config.appOrigin || `http://localhost:${port}`;
+const { apiOrigin = "http://localhost:3001" } = config;
+
 
 export const ExternalApiComponent = () => {
   const [state, setState] = useState({
