@@ -7,7 +7,8 @@ import Loading from "../components/Loading";
 import whole from "../assets/whole.png";
 
 // const { apiOrigin = "http://localhost:3001" } = config;
-const apiOrigin = config.appOrigin || `http://localhost:${appPort}`;
+const port = process.env.API_PORT || 3001;
+const apiOrigin = config.appOrigin || `http://localhost:${port}`;
 
 export const ExternalApiComponent = () => {
   const [state, setState] = useState({
