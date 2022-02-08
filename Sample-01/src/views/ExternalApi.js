@@ -2,12 +2,13 @@ import React, { useState } from "react";
 import { Button, Alert } from "reactstrap";
 import Highlight from "../components/Highlight";
 import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
-import { getConfig } from "../config";
+import config from "../auth_config.json";
 import Loading from "../components/Loading";
 
-export const ExternalApiComponent = () => {
-  const { apiOrigin = "http://localhost:3001", audience } = getConfig();
 
+const { apiOrigin = "http://localhost:3001" } = config;
+
+export const ExternalApiComponent = () => {
   const [state, setState] = useState({
     showResult: false,
     apiMessage: "",
@@ -15,6 +16,7 @@ export const ExternalApiComponent = () => {
   });
 
   const {
+    user,
     getAccessTokenSilently,
     loginWithPopup,
     getAccessTokenWithPopup,
@@ -22,7 +24,9 @@ export const ExternalApiComponent = () => {
 
   const handleConsent = async () => {
     try {
-      await getAccessTokenWithPopup();
+      await getAccessTokenWithPopup({
+        scope: 'update:current_user_metadata'
+      });
       setState({
         ...state,
         error: null,
@@ -54,28 +58,81 @@ export const ExternalApiComponent = () => {
     await callApi();
   };
 
-  const callApi = async () => {
-    try {
-      const token = await getAccessTokenSilently();
-
-      const response = await fetch(`${apiOrigin}/api/external`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      const responseData = await response.json();
+  const eVerify = async () => {
+    const responseData = "No Pizza for you! Please verify your email before ordering."
 
       setState({
         ...state,
         showResult: true,
         apiMessage: responseData,
       });
-    } catch (error) {
+
+  }
+
+  const callApi = async () => {
+    console.log(user)
+     try {
+  
+      // Get the access token from the Auth0 client
+      const token = await getAccessTokenSilently();
+
+      const user = await useAuth0;
+      console.log(JSON.stringify(user))
+      const date = Date.now();
+
+      //set auth0 user_metadata
+      user.user_metadata = user.user_metadata || {};
+      user.user_metadata.orders = user.user_metadata.orders || {};
+      user.user_metadata.orders = {"date": date, "Pizza": "XL"}
+      console.log(user.user_metadata)
+      // Make the call to the API, setting the token
+      // in the Authorization header
+      const response = await fetch(`${apiOrigin}/api/external`, {
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Content-type": "application/json"
+
+        },
+        method: 'POST',
+        body: JSON.stringify(user.user_metadata.orders)
+      });
+  
+      // Fetch the JSON result
+      const responseStatus = response.status
+      let responseData;
+      if (responseStatus > 200) {
+        // document.getElementById("api-call-result").classList.add('alert-danger');
+         responseData = "Insufficent Scope: a scope of update:current_user_metadata is required"
+      } else {
+        // document.getElementById("api-call-result").classList.add('alert-success');
+        responseData = await response.json();
+      }
       setState({
         ...state,
-        error: error.error,
+        showResult: true,
+        apiMessage: responseData,
       });
+      
+  
+    //   Display the result in the output element
+      // const responseElement = document.getElementById("api-call-result");
+      // responseElement.innerText = JSON.stringify(responseData, {}, 2);
+
+
+  
+  } catch (error) {
+      // Display errors in the console
+      // console.error(e)
+      // if (e instanceof Error) {
+      //     if (e.message === 'Login required'){
+      //       document.getElementById("api-call-result").classList.add('alert-danger');
+      //       document.getElementById("api-call-result").innerText = e
+      //     }
+      // } 
+        setState({
+          ...state,
+          error: error.error,
+        })    
     }
   };
 
@@ -113,71 +170,15 @@ export const ExternalApiComponent = () => {
           </Alert>
         )}
 
-        <h1>External API</h1>
-        <p className="lead">
-          Ping an external API by clicking the button below.
-        </p>
-
+        <h1>XL Pizza</h1>
         <p>
-          This will call a local API on port 3001 that would have been started
-          if you run <code>npm run dev</code>. An access token is sent as part
-          of the request's `Authorization` header and the API will validate it
-          using the API's audience value.
+          Ping an external API by clicking the button below. This will call the
+          external API using an access token, and the API will validate it using
+          the API's audience value.
         </p>
-
-        {!audience && (
-          <Alert color="warning">
-            <p>
-              You can't call the API at the moment because your application does
-              not have any configuration for <code>audience</code>, or it is
-              using the default value of <code>YOUR_API_IDENTIFIER</code>. You
-              might get this default value if you used the "Download Sample"
-              feature of{" "}
-              <a href="https://auth0.com/docs/quickstart/spa/react">
-                the quickstart guide
-              </a>
-              , but have not set an API up in your Auth0 Tenant. You can find
-              out more information on{" "}
-              <a href="https://auth0.com/docs/api">setting up APIs</a> in the
-              Auth0 Docs.
-            </p>
-            <p>
-              The audience is the identifier of the API that you want to call
-              (see{" "}
-              <a href="https://auth0.com/docs/get-started/dashboard/tenant-settings#api-authorization-settings">
-                API Authorization Settings
-              </a>{" "}
-              for more info).
-            </p>
-
-            <p>
-              In this sample, you can configure the audience in a couple of
-              ways:
-            </p>
-            <ul>
-              <li>
-                in the <code>src/index.js</code> file
-              </li>
-              <li>
-                by specifying it in the <code>auth_config.json</code> file (see
-                the <code>auth_config.json.example</code> file for an example of
-                where it should go)
-              </li>
-            </ul>
-            <p>
-              Once you have configured the value for <code>audience</code>,
-              please restart the app and try to use the "Ping API" button below.
-            </p>
-          </Alert>
-        )}
-
-        <Button
-          color="primary"
-          className="mt-5"
-          onClick={callApi}
-          disabled={!audience}
-        >
-          Ping API
+        
+        <Button color="primary" className="mt-5" onClick={user.email_verified? callApi: eVerify} >
+          Order
         </Button>
       </div>
 
