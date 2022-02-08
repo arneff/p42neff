@@ -85,8 +85,8 @@ app.post("/api/external", checkJwt, checkScopes,  async (req, res) => {
   });
   
   const userResp = await userReq.json()
-  console.log(userResp) 
-  
+  console.log("resp: "+ JSON.stringify(userResp)) 
+  console.log(userResp.user_metadata.orders)
   if (userResp.user_metadata.orders){
     userResp.user_metadata.orders.push(req.body)
     const metaAdd = await fetch(`https:dev-h1uc4uvp.us.auth0.com/api/v2/users/${user_id}`, {
@@ -96,7 +96,9 @@ app.post("/api/external", checkJwt, checkScopes,  async (req, res) => {
       },
       method: "PATCH",
       body: JSON.stringify(userResp)
+      
     });
+    const addResp = await metaAdd.json()
 
   } else {
     const metaReq = await fetch(`https:dev-h1uc4uvp.us.auth0.com/api/v2/users/${user_id}`, {

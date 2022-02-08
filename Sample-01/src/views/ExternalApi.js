@@ -4,7 +4,7 @@ import Highlight from "../components/Highlight";
 import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
 import config from "../auth_config.json";
 import Loading from "../components/Loading";
-
+import whole from "../assets/whole.png";
 
 const { apiOrigin = "http://localhost:3001" } = config;
 
@@ -103,6 +103,7 @@ export const ExternalApiComponent = () => {
       if (responseStatus > 200) {
         // document.getElementById("api-call-result").classList.add('alert-danger');
          responseData = "Insufficent Scope: a scope of update:current_user_metadata is required"
+         
       } else {
         // document.getElementById("api-call-result").classList.add('alert-success');
         responseData = await response.json();
@@ -112,23 +113,9 @@ export const ExternalApiComponent = () => {
         showResult: true,
         apiMessage: responseData,
       });
-      
-  
-    //   Display the result in the output element
-      // const responseElement = document.getElementById("api-call-result");
-      // responseElement.innerText = JSON.stringify(responseData, {}, 2);
-
 
   
   } catch (error) {
-      // Display errors in the console
-      // console.error(e)
-      // if (e instanceof Error) {
-      //     if (e.message === 'Login required'){
-      //       document.getElementById("api-call-result").classList.add('alert-danger');
-      //       document.getElementById("api-call-result").innerText = e
-      //     }
-      // } 
         setState({
           ...state,
           error: error.error,
@@ -169,17 +156,17 @@ export const ExternalApiComponent = () => {
             </a>
           </Alert>
         )}
-
+        <img className="mb-3 app-logo" src={whole} alt="React logo" width="120" />
         <h1>XL Pizza</h1>
         <p>
           Ping an external API by clicking the button below. This will call the
-          external API using an access token, and the API will validate it using
-          the API's audience value.
+          external API using valid token with a specific scope.
         </p>
         
-        <Button color="primary" className="mt-5" onClick={user.email_verified? callApi: eVerify} >
+        <Button  color="primary" className="mt-5" onClick={user.email_verified? callApi: eVerify} >
           Order
         </Button>
+        
       </div>
 
       <div className="result-block-container">
