@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import { Button, Alert } from "reactstrap";
 import Highlight from "../components/Highlight";
 import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
-import config from "../auth_config.json";
+// import config from "../auth_config.json";
 import Loading from "../components/Loading";
 import whole from "../assets/whole.png";
 
-const { apiOrigin = "http://localhost:3001" } = config;
+// const { apiOrigin = "http://localhost:3001" } = config;
 
 
 export const ExternalApiComponent = () => {
@@ -88,7 +88,7 @@ export const ExternalApiComponent = () => {
       console.log(user.user_metadata)
       // Make the call to the API, setting the token
       // in the Authorization header
-      const response = await fetch(`${apiOrigin}/api/external`, {
+      const response = await fetch(`/api/external`, {
         headers: {
           "Authorization": `Bearer ${token}`,
           "Content-type": "application/json"
