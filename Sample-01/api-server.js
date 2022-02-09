@@ -93,7 +93,7 @@ app.post("/api/member", async (req, res) => {
       body: JSON.stringify(roleData)
     });
     const addResp = await addRoleReq.body;
-    console.log(addResp)
+    // console.log(addResp)
     res.send({msg: "The meaning of life can now be yours! ;) Please refresh your browser to place an order!"});
   }
 
