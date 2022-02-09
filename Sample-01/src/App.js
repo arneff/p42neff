@@ -8,6 +8,8 @@ import Footer from "./components/Footer";
 import Home from "./views/Home";
 import Profile from "./views/Profile";
 import ExternalApi from "./views/ExternalApi";
+import ExternalMember from "./views/ExternalMember";
+
 import { useAuth0 } from "@auth0/auth0-react";
 import history from "./utils/history";
 
@@ -38,6 +40,7 @@ const App = () => {
             <Route path="/" exact component={Home} />
             <Route path="/profile" component={Profile} />
             <Route path="/external-api" component={ExternalApi} />
+            <Route path="/external-member" component={ExternalMember} />
           </Switch>
         </Container>
         <Footer />

@@ -44,6 +44,62 @@ const checkJwt = jwt({
 
 const checkScopes = jwtScope('update:current_user_metadata');
 
+app.post("/api/member", async (req, res) => {
+    // console.log("req: " + JSON.stringify(req.user))
+  const user_id = req.body.id;
+
+  // request body for mgmt api access token
+  const mReq = await fetch('https://dev-h1uc4uvp.us.auth0.com/oauth/token', {
+    headers: {
+    "Content-Type": "application/x-www-form-urlencoded",
+    },
+    method: 'POST',
+    body: new URLSearchParams( {
+      'grant_type': 'client_credentials',
+      'client_id': `${process.env.CLIENTID}`,
+      'client_secret': `${process.env.CLIENTSECRET}`,
+      'audience': 'https://dev-h1uc4uvp.us.auth0.com/api/v2/',
+      'scope': 'read:users read:user_idp_tokens update:users update:users_app_metadata'
+    })
+  
+  });
+  const mResp = await mReq.json();
+  const mToken = mResp.access_token;
+  console.log(mToken)
+  const roleReq = await fetch(`https:dev-h1uc4uvp.us.auth0.com/api/v2/users/${user_id}/roles`, {
+    headers: {
+      "Authorization": `Bearer ${mToken}`,
+      "Content-Type": "application/json",
+    }
+  });
+  const roleResp = await roleReq.json();
+  // const roleName = roleResp[0].name;
+  try {
+    if (roleResp[0].name === "member") {
+      res.send({msg: "Thank you for already being a member!"});
+    }
+
+  } catch (err) {
+    // console.log("Caught" + err)
+    const roleData = {
+      "roles": ["rol_30LzEbh6zy0JOD8y"]
+    }
+    const addRoleReq = await fetch(`https:dev-h1uc4uvp.us.auth0.com/api/v2/users/${user_id}/roles`, {
+      headers: {
+        "Authorization": `Bearer ${mToken}`,
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+      body: JSON.stringify(roleData)
+    });
+    const addResp = await addRoleReq.body;
+    console.log(addResp)
+    res.send({msg: "The meaning of life can now be yours! ;) Please refresh your browser to place an order!"});
+  }
+
+  
+});
+
 
 app.post("/api/external", checkJwt, checkScopes,  async (req, res) => {
   const user_id = req.user.sub

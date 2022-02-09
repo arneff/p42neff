@@ -63,6 +63,20 @@ const NavBar = () => {
                   >
                     Online Menu
                   </NavLink>
+                  
+                </NavItem>
+              )}
+              {isAuthenticated && (
+                <NavItem>
+                  <NavLink
+                    tag={RouterNavLink}
+                    to="/external-member"
+                    exact
+                    activeClassName="router-link-exact-active"
+                  >
+                    Become a Member
+                  </NavLink>
+                  
                 </NavItem>
               )}
             </Nav>
