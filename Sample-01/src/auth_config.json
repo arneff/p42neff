@@ -3,4 +3,6 @@
   "clientId": "wDUsOJsjqnJDuP7zMqZa1yd9Vm4x2LqF",
   "audience": "https://hawktest.com",
   "scope": "update:current_user_metadata",
+  "appOrigin": "http://172.105.135.61:3000",
+  "apiOrigin": "http://172.105.135.61:3001"
 }
