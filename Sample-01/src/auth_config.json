@@ -3,5 +3,5 @@
   "clientId": "wDUsOJsjqnJDuP7zMqZa1yd9Vm4x2LqF",
   "audience": "https://hawktest.com",
   "scope": "update:current_user_metadata",
-  "appOrigin": "https://auth0-react-samples-phi.vercel.app/"
+  "appOrigin": "https://auth0-react-samples-phi.vercel.app"
 }
