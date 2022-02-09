@@ -16,7 +16,6 @@
     "prod": "npm-run-all --parallel server api-server"
   },
   "homepage": "https://auth0-react-samples-pearl.vercel.app",
-  "proxy": "http://localhost:3001/",
   "dependencies": {
     "@auth0/auth0-react": "^1.2.0",
     "@fortawesome/fontawesome-svg-core": "^1.2.17",
