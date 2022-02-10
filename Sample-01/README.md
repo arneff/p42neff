@@ -31,6 +31,30 @@
     }
     ```
 
+## Configure credentials
+The project needs to be configured with your Auth0 domain and client ID in order for the authentication flow to work.
+
+To do this, first copy src/auth_config.json.example into a new file in the same folder called src/auth_config.json, and replace the values with your own Auth0 application credentials, and optionally the base URLs of your application and API:
+
+```JSON
+{
+  "domain": "{YOUR AUTH0 DOMAIN}",
+  "clientId": "{YOUR AUTH0 CLIENT ID}",
+  "audience": "{YOUR AUTH0 API_IDENTIFIER}",
+  "appOrigin": "{OPTIONAL: THE BASE URL OF YOUR APPLICATION (default: http://localhost:3000)}",
+  "apiOrigin": "{OPTIONAL: THE BASE URL OF YOUR API (default: http://localhost:3001)}"
+}
+```
+
+## Environment Variables
+This project utizlizes the Auth0 Management API and will requires a set of secondary credentials to be read from a ```.env``` file within the Sample-01 directory.
+```bash
+CLIENTSECRET=xxxxyyyyxxxxx
+CLIENTID=xxxxyyyyxxxxx
+AUDIENCE=https://{YOUR_DOMAIN}.auth0.com/api/v2/
+```
+
+
 ## Project setup
 
 Use `npm` to install the project dependencies:
