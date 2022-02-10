@@ -54,7 +54,6 @@ CLIENTID=xxxxyyyyxxxxx
 AUDIENCE=https://{YOUR_DOMAIN}.auth0.com/api/v2/
 ```
 
-
 ## Project setup
 
 Use `npm` to install the project dependencies:
