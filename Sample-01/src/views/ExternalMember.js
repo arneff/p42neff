@@ -62,7 +62,7 @@ export const ExternalMemberComponent = () => {
   };
 
   const eVerify = async () => {
-    const responseData = "No Pizza for you! Please verify your email before ordering."
+    const responseData = "Please verify your email before becoming a member."
 
       setState({
         ...state,

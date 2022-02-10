@@ -141,11 +141,12 @@ app.post("/api/external", checkJwt, checkScopes,  async (req, res) => {
   });
   
   const userResp = await userReq.json()
-  // let orders = userResp.user_metadata.orders
-  // console.log("resp: "+ JSON.stringify(userResp)) 
-  // console.log("line 89: " +JSON.stringify(userResp.user_metadata.orders))
-  // console.log(orders)
-  if (userResp.user_metadata.orders){
+  // if orders are present push req body to userResp to use in POST
+  // if error then provide orders key for req.body value
+  console.log(userResp.user_metadata)
+
+  // let ordersPresent = "orders" in userResp.user_metadata ? true : false;
+  if (typeof userResp.user_metadata !== 'undefined'){
     userResp.user_metadata.orders.push(req.body)
     const metaAdd = await fetch(`https:dev-h1uc4uvp.us.auth0.com/api/v2/users/${user_id}`, {
       headers: {
@@ -157,8 +158,9 @@ app.post("/api/external", checkJwt, checkScopes,  async (req, res) => {
       
     });
     const addResp = await metaAdd.json()
+    console.log("add response" + JSON.stringify(addResp)) 
 
-  } else {
+  }else {
     const metaReq = await fetch(`https:dev-h1uc4uvp.us.auth0.com/api/v2/users/${user_id}`, {
       headers: {
         "Authorization": `Bearer ${mToken}`,
@@ -168,7 +170,15 @@ app.post("/api/external", checkJwt, checkScopes,  async (req, res) => {
       body: JSON.stringify(uMeta)
     });
     const metaResp = await metaReq.json()
+    console.log(metaResp)
+
   }
+  
+
+
+    
+
+   
 });
 
 app.listen(port, () => console.log(`API Server listening on port ${port}`));
