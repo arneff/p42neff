@@ -1,14 +1,36 @@
-# Auth0 React SDK Sample Application
+# Pizza42 
 
-This sample demonstrates the integration of [Auth0 React SDK](https://github.com/auth0/auth0-react) into a React application created using [create-react-app](https://reactjs.org/docs/create-a-new-react-app.html). The sample is a companion to the [Auth0 React SDK Quickstart](https://auth0.com/docs/quickstart/spa/react).
 
-This sample demonstrates the following use cases:
+## Challenges
 
-- [Login](https://github.com/auth0-samples/auth0-react-samples/blob/master/Sample-01/src/components/NavBar.js#L72-L79)
-- [Logout](https://github.com/auth0-samples/auth0-react-samples/blob/master/Sample-01/src/components/NavBar.js#L102-L108)
-- [Showing the user profile](https://github.com/auth0-samples/auth0-react-samples/blob/master/Sample-01/src/views/Profile.js)
-- [Protecting routes](https://github.com/auth0-samples/auth0-react-samples/blob/master/Sample-01/src/views/Profile.js#L33)
-- [Calling APIs](https://github.com/auth0-samples/auth0-react-samples/blob/master/Sample-01/src/views/ExternalApi.js)
+ 
+- Choose the Single-Page App (SPA) option from the Auth0 documentation website
+(https://auth0.com/docs). SPAs are commonly used by Auth0 customers.
+- Choose a JavaScript framework option. 
+    - React application [Auth0 React SDK](https://github.com/auth0/auth0-react)
+    - 
+- Complete the [Login](https://github.com/arneff/auth0-react-samples/blob/d1027816292860a8908422da29cb50eb4a4177b6/Sample-01/src/components/NavBar.js#L85-L94) 
+- Call an API 
+    - [ExternalAPI](https://github.com/arneff/auth0-react-samples/blob/master/Sample-01/src/views/ExternalApi.js) Requires both a users email to be verified and for the user to be assigned a "member" role before an order can be placed.
+    - [ExternalMember](https://github.com/arneff/auth0-react-samples/blob/master/Sample-01/src/views/ExternalMember.js) Assigns the "member" role to the user. Browser refresh required to order pizza.
+- Sign in with either email / password or a social identity provider such as Google.
+    - Using Actions to link accounts with the same email providing the user flexibility for login option.
+    - Implemented as outlined in this Auth0 community [post](https://community.auth0.com/t/account-linking-through-actions/68940/3)
+- [email_verified](https://github.com/arneff/auth0-react-samples/blob/d1027816292860a8908422da29cb50eb4a4177b6/Sample-01/src/views/ExternalApi.js#L170-L172) required before an order can be placed. Users with unverified emails can still login.
+- The API endpoint ([/api/external](https://github.com/arneff/auth0-react-samples/blob/d1027816292860a8908422da29cb50eb4a4177b6/Sample-01/api-server.js#L104)) servicing the orders request must require a valid token as well as a specific scope ([update:current_user_metadata](https://github.com/arneff/auth0-react-samples/blob/d1027816292860a8908422da29cb50eb4a4177b6/Sample-01/api-server.js#L45)) for the operation to complete.
+- After an order is placed, save the order to the user’s Auth0 profile for future reference.
+    - Implemented via the [Auth0_Management_API](https://github.com/arneff/auth0-react-samples/blob/d1027816292860a8908422da29cb50eb4a4177b6/Sample-01/api-server.js#L133-L174)
+- Add the order history of a user to their ID token when they login
+    - Implemented with Actions
+
+    ```javascript
+    exports.onExecutePostLogin = async (event, api) => {
+      const namespace = 'https://p42.com';
+      if (event.authorization) {
+        api.idToken.setCustomClaim(`${namespace}/orders`, event.user.user_metadata);
+      }
+    }
+    ```
 
 ## Project setup
 
@@ -17,34 +39,6 @@ Use `npm` to install the project dependencies:
 ```bash
 npm install
 ```
-
-## Configuration
-
-### Create an API
-
-For the ["call an API"](https://auth0.com/docs/quickstart/spa/react/02-calling-an-api) page to work, you will need to [create an API](https://auth0.com/docs/apis) using the [management dashboard](https://manage.auth0.com/#/apis). This will give you an API identifier that you can use in the `audience` configuration field below.
-
-If you do not wish to use an API or observe the API call working, you should not specify the `audience` value in the next step. Otherwise, you will receive a "Service not found" error when trying to authenticate.
-
-### Configure credentials
-
-The project needs to be configured with your Auth0 domain and client ID in order for the authentication flow to work.
-
-To do this, first copy `src/auth_config.json.example` into a new file in the same folder called `src/auth_config.json`, and replace the values with your own Auth0 application credentials, and optionally the base URLs of your application and API:
-
-```json
-{
-  "domain": "{YOUR AUTH0 DOMAIN}",
-  "clientId": "{YOUR AUTH0 CLIENT ID}",
-  "audience": "{YOUR AUTH0 API_IDENTIFIER}",
-  "appOrigin": "{OPTIONAL: THE BASE URL OF YOUR APPLICATION (default: http://localhost:3000)}",
-  "apiOrigin": "{OPTIONAL: THE BASE URL OF YOUR API (default: http://localhost:3001)}"
-}
-```
-
-**Note**: Do not specify a value for `audience` here if you do not wish to use the API part of the sample.
-
-## Run the sample
 
 ### Compile and hot-reload for development
 
@@ -72,33 +66,7 @@ To build and run the Docker image, run `exec.sh`, or `exec.ps1` on Windows.
 npm run test
 ```
 
-## Frequently Asked Questions
 
-If you're having issues running the sample applications, including issues such as users not being authenticated on page refresh, please [check the auth0-react FAQ](https://github.com/auth0/auth0-react/blob/master/FAQ.md).
-
-## What is Auth0?
-
-Auth0 helps you to:
-
-* Add authentication with [multiple sources](https://auth0.com/docs/identityproviders), either social identity providers such as **Google, Facebook, Microsoft Account, LinkedIn, GitHub, Twitter, Box, Salesforce** (amongst others), or enterprise identity systems like **Windows Azure AD, Google Apps, Active Directory, ADFS, or any SAML Identity Provider**.
-* Add authentication through more traditional **[username/password databases](https://auth0.com/docs/connections/database/custom-db)**.
-* Add support for **[linking different user accounts](https://auth0.com/docs/users/user-account-linking)** with the same user.
-* Support for generating signed [JSON Web Tokens](https://auth0.com/docs/tokens/json-web-tokens) to call your APIs and **flow the user identity** securely.
-* Analytics of how, when, and where users are logging in.
-* Pull data from other sources and add it to the user profile through [JavaScript rules](https://auth0.com/docs/rules).
-
-## Create a Free Auth0 Account
-
-1. Go to [Auth0](https://auth0.com) and click **Sign Up**.
-2. Use Google, GitHub, or Microsoft Account to login.
-
-## Issue Reporting
-
-If you have found a bug or if you have a feature request, please report them at this repository issues section. Please do not report security vulnerabilities on the public GitHub issue tracker. The [Responsible Disclosure Program](https://auth0.com/responsible-disclosure-policy) details the procedure for disclosing security issues.
-
-## Author
-
-[Auth0](https://auth0.com)
 
 ## License
 
