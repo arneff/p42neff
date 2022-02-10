@@ -8,7 +8,6 @@
 (https://auth0.com/docs). SPAs are commonly used by Auth0 customers.
 - Choose a JavaScript framework option. 
     - React application [Auth0 React SDK](https://github.com/auth0/auth0-react)
-    - 
 - Complete the [Login](https://github.com/arneff/auth0-react-samples/blob/d1027816292860a8908422da29cb50eb4a4177b6/Sample-01/src/components/NavBar.js#L85-L94) 
 - Call an API 
     - [ExternalAPI](https://github.com/arneff/auth0-react-samples/blob/master/Sample-01/src/views/ExternalApi.js) Requires both a users email to be verified and for the user to be assigned a "member" role before an order can be placed.
